@@ -10,8 +10,8 @@
     - [Grafana Dashboard](#Grafana-Dashboard)
     - [Jupyter Terminal](#Jupyter-Terminal)
 - [Runtime Specific Steps](#Runtime-Specific-Steps)
-    - [KubeJob (Job)](#KubeJob-(Job))
-    - [MPIJob (Horovod)](#MPIJob-(Horovod))
+    - [KubeJob (Job)](#KubeJob-Job)
+    - [MPIJob (Horovod)](#MPIJob-Horovod)
     - [Nuclio](#Nuclio)
 - [FAQ](#FAQ)
 
