@@ -36,7 +36,7 @@ The exact syntax to submit a job varies slighly by runtime. The general pattern 
 Examples can be found in the [examples](examples) directory.
 
 #### Job Lifecycle
-Over the course of a job, a pod will have different status' that make up its lifecycle. Some of these status' are to be expected, while others are error states that represent some kind of failure. Understanding these lifecycle states is an important component of debugging and troubleshooting.
+Over the course of a job, a pod will have different statuses that make up its lifecycle. Some of these statuses are to be expected, while others are error states that represent some kind of failure. Understanding these lifecycle states is an important component of debugging and troubleshooting.
 
 This section will separate these lifecycle states into "Normal" and "Error" states, but in reality there will be some overlap. Use your best judgement on whether a particular status is a normal state or an error state. Generally, if things are not working as expected, the state is some kind of error state.
 
@@ -340,3 +340,6 @@ training-demo-c2z6f   0/1     Completed   0          40m
 kubectl describe pod training-demo-c2z6f | grep mlrun/owner
 mlrun/owner=nick
 ```
+
+### My pod is in X state. How should I continue?
+- See `Job Lifecycle` for more information on specific statuses and how to troubleshoot them.
