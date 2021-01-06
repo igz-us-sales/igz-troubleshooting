@@ -1,3 +1,6 @@
 theme: jekyll-theme-cayman
 markdown: kramdown
 title: Iguazio Troubleshooting Guide
+
+plugins:
+  - jekyll-relative-links
