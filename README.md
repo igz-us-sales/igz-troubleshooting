@@ -55,16 +55,26 @@ Over the course of a job, a pod will have different status' that make up its lif
 This section will separate these lifecycle states into "Normal" and "Error" states, but in reality there will be some overlap. Use your best judgement on whether a particular status is a normal state or an error state. Generally, if things are not working as expected, the state is some kind of error state.
 
 - Normal States
-    - `Running`
-    - `Completed`
-    - `Terminating`
-    - `Terminated`
+    - `Running` : Pod has been successfully scheduled and is currently running.
+    - `Completed` : Pod has been sucessfully scheduled and ran to completion.
+    - `Terminated` : Pod has been sucessfully scheduled and terminated before completion.
+    - `ContainerCreating` : Container for pod is still being created. Normal when first running pod and/or it is using a large image.
 - Error States
-    - `Pending`
-    - `ContainerCreating`
-    - `ImagePullBackOff`
-    - `CrashLoopBackOff`
-    - `Init:0/1`
+    - `Init:0/1` : Usually only seen with launcher/worker pod combos. The worker is often stuck in `Pending` and the launcher is waiting to initialize.
+        - Check status with `kubectl describe` for a reason the pod is still initializing.
+        - See `Pending` for troubleshooting.
+    - `Pending` : Pod has not been scheduled yet. Usually due to resource constraints such as requesting too many CPU's or GPU's.
+        - Check status with `kubectl describe` for a reason the pod will not schedule.
+    - `Terminating` : Pod has been sucessfully scheduled, but is in the process of terminating before completion. Normal if in this state for a short period of time. If the pod is stuck in this state, there is likely an issue.
+        - Check logs via UI or `kubectl logs` for reasons for failure. Alternatively, check `kubectl describe`.
+        - To manually delete the pod, run `kubectl delete pod <POD-NAME> --grace-period=0 --force`.
+    - `ImagePullBackOff` : Pod cannot pull requested image.
+        - Check logs via UI or `kubectl logs` for reasons for failure. Alternatively, check `kubectl describe`.
+        - Check docker registry and any secrets if necessary.
+    - `CrashLoopBackOff` : Pod is starting, then crashing, then starting again and crashing again. Generally a configuration issue.
+        - Generally no simple solution as it is container/application specific.
+        - Check logs via UI or `kubectl logs` for reasons for failure. Alternatively, check `kubectl describe`.
+        - Double check docker image, environment variables, command line flags, etc.
 
 ### Pipelines 
 #### What is a pipeline?
