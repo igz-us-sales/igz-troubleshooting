@@ -33,7 +33,7 @@ The exact syntax to submit a job varies slighly by runtime. The general pattern 
 2. Define MLRun task that will be run when job is executed. This includes the code to run, specific runtime, and any parameters to run with. The code itself can be defined within the same notebook or in a separate script.
 3. Submit MLRun task to be run locally (within notebook) or on cluster.
 
-Examples can be found in the [examples](examples) directory.
+Examples can be found in the [examples](https://github.com/igz-us-sales/igz-troubleshooting/tree/master/examples) directory.
 
 #### Job Lifecycle
 Over the course of a job, a pod will have different statuses that make up its lifecycle. Some of these statuses are to be expected, while others are error states that represent some kind of failure. Understanding these lifecycle states is an important component of debugging and troubleshooting.
@@ -64,7 +64,7 @@ This section will separate these lifecycle states into "Normal" and "Error" stat
 
 ### Pipelines 
 #### What is a pipeline?
-A pipeline is generally a series of components that do different tasks but are related in some way. There are many applications of a pipeline and many tools to create them. In Iguazio, we use [KubeFlow Pipelines](#https://www.kubeflow.org/docs/pipelines/).
+A pipeline is generally a series of components that do different tasks but are related in some way. There are many applications of a pipeline and many tools to create them. In Iguazio, we use [KubeFlow Pipelines](https://www.kubeflow.org/docs/pipelines/).
 
 For example, a sample machine learning pipeline might look like the following:
 - Download Data
@@ -101,7 +101,7 @@ Another benefit is that each pipeline component can have its own code, runtime, 
 4. Define Kubeflow Pipeline in Python code. This includes parameters for each component as well as relationships between different components. For example, the input to one component can be the output from another.
 5. Save Kubeflow Pipeline and submit to cluster.
 
-Examples can be found in the [examples](examples) directory.
+Examples can be found in the [examples](https://github.com/igz-us-sales/igz-troubleshooting/tree/master/examples) directory.
 
 ## General Steps
 ### MLRun UI
