@@ -1,23 +1,6 @@
 # Iguazio Troubleshooting Guide
 
 ## Table of Contents
-- [Concepts](#Concepts)
-    - [Pods](#Pods)
-    - [Jobs](#Jobs)
-    - [Pipelines](#Pipelines)
-- [General Steps](#General-Steps)
-    - [MLRun UI](#MLRun-UI)
-    - [Nuclio UI](#Nuclio-UI)
-    - [Grafana Dashboard](#Grafana-Dashboard)
-    - [Jupyter Terminal](#Jupyter-Terminal)
-- [Runtime Specific Steps](#Runtime-Specific-Steps)
-    - [KubeJob (Job)](#KubeJob-Job)
-    - [MPIJob (Horovod)](#MPIJob-Horovod)
-    - [Nuclio](#Nuclio)
-- [FAQ](#FAQ)
-
-
-## TOC
 * TOC
 {:toc}
 
