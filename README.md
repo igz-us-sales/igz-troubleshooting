@@ -305,35 +305,35 @@ kubectl delete pod nuclio-default-recognize-faces-6747c89c8d-jj4ml
 ```
 
 ## FAQ
-- What if I forget what the name of my pod is?
-    - If executed via MLRun
-        - Check MLRun UI or
-        - `kubectl get pods -l mlrun/owner=<MY-NAME>`
-    - If executed via Kubeflow Pipelines
-        - Check KF Pipelines UI component log or 
-        - `kubectl get pods -l mlrun/owner=<MY-NAME>`
-    - If Nuclio serverless function
-        - Check Nuclio UI or
-        - `kubectl get pods -l nuclio.io/project-name=<MY-PROJECT>`
-        - `kubectl get pods -l nuclio.io/function-name=<MY-FUNCTION>`
-- How do I find if a job is still running?
-    - `kubectl get pod <POD-NAME>` should give a status. If that status is not `Running`, the job is not running.
-    - Check logs in UI or via `kubectl logs <POD-NAME>`. See above for specific runtime example.
-- My job failed. Why?
-    - Run `kubectl describe pod <POD-NAME>` on failure. For example `kubectl describe pod training-demo-c2z6f | grep -i state -C 5`. This will show the state and a brief description in case of failure.
-    - For more inforamtion, check logs in UI or via `kubectl logs <POD-NAME>`. See above for specific runtime example.
-- How can I find who launched a specfic MLRun pod?
-    - Get the pod name
-    ```
-    kubectl get pods -l mlrun/class=job
-    NAME                  READY   STATUS      RESTARTS   AGE
-    download-wqq5v        0/1     Completed   0          53m
-    label-wtxzs           0/1     Completed   0          52m
-    training-demo-8qlcm   0/1     Completed   0          19m
-    training-demo-c2z6f   0/1     Completed   0          40m
-    ```
-    - Describe pod and `grep` by `mlrun/owner`
-    ```
-    kubectl describe pod training-demo-c2z6f | grep mlrun/owner
-    mlrun/owner=nick
-    ```
+### What if I forget what the name of my pod is?
+- If executed via MLRun
+    - Check MLRun UI or
+    - `kubectl get pods -l mlrun/owner=<MY-NAME>`
+- If executed via Kubeflow Pipelines
+    - Check KF Pipelines UI component log or 
+    - `kubectl get pods -l mlrun/owner=<MY-NAME>`
+- If Nuclio serverless function
+    - Check Nuclio UI or
+    - `kubectl get pods -l nuclio.io/project-name=<MY-PROJECT>`
+    - `kubectl get pods -l nuclio.io/function-name=<MY-FUNCTION>`
+### How do I find if a job is still running?
+- `kubectl get pod <POD-NAME>` should give a status. If that status is not `Running`, the job is not running.
+- Check logs in UI or via `kubectl logs <POD-NAME>`. See above for specific runtime example.
+### My job failed. Why?
+- Run `kubectl describe pod <POD-NAME>` on failure. For example `kubectl describe pod training-demo-c2z6f | grep -i state -C 5`. This will show the state and a brief description in case of failure.
+- For more inforamtion, check logs in UI or via `kubectl logs <POD-NAME>`. See above for specific runtime example.
+### How can I find who launched a specfic MLRun pod?
+- Get the pod name
+```
+kubectl get pods -l mlrun/class=job
+NAME                  READY   STATUS      RESTARTS   AGE
+download-wqq5v        0/1     Completed   0          53m
+label-wtxzs           0/1     Completed   0          52m
+training-demo-8qlcm   0/1     Completed   0          19m
+training-demo-c2z6f   0/1     Completed   0          40m
+```
+- Describe pod and `grep` by `mlrun/owner`
+```
+kubectl describe pod training-demo-c2z6f | grep mlrun/owner
+mlrun/owner=nick
+```
