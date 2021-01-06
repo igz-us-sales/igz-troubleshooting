@@ -316,12 +316,15 @@ kubectl delete pod nuclio-default-recognize-faces-6747c89c8d-jj4ml
     - Check Nuclio UI or
     - `kubectl get pods -l nuclio.io/project-name=<MY-PROJECT>`
     - `kubectl get pods -l nuclio.io/function-name=<MY-FUNCTION>`
+    
 ### How do I find if a job is still running?
 - `kubectl get pod <POD-NAME>` should give a status. If that status is not `Running`, the job is not running.
 - Check logs in UI or via `kubectl logs <POD-NAME>`. See above for specific runtime example.
+
 ### My job failed. Why?
 - Run `kubectl describe pod <POD-NAME>` on failure. For example `kubectl describe pod training-demo-c2z6f | grep -i state -C 5`. This will show the state and a brief description in case of failure.
 - For more inforamtion, check logs in UI or via `kubectl logs <POD-NAME>`. See above for specific runtime example.
+
 ### How can I find who launched a specfic MLRun pod?
 - Get the pod name
 ```
