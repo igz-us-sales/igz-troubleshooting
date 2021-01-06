@@ -1,5 +1,3 @@
-# Iguazio Troubleshooting Guide
-
 ## Table of Contents
 * TOC
 {:toc}
