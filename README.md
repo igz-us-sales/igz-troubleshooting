@@ -18,7 +18,8 @@
 
 
 ## TOC
-* TOC {:toc}
+* TOC
+{:toc}
 
 ## Concepts
 ### Pods
