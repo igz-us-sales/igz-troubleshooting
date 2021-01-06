@@ -49,6 +49,23 @@ The exact syntax to submit a job varies slighly by runtime. The general pattern 
 
 Examples can be found in the [examples](examples) directory.
 
+#### Job Lifecycle
+Over the course of a job, a pod will have different status' that make up its lifecycle. Some of these status' are to be expected, while others are error states that represent some kind of failure. Understanding these lifecycle states is an important component of debugging and troubleshooting.
+
+This section will separate these lifecycle states into "Normal" and "Error" states, but in reality there will be some overlap. Use your best judgement on whether a particular status is a normal state or an error state. Generally, if things are not working as expected, the state is some kind of error state.
+
+- Normal States
+    - `Running`
+    - `Completed`
+    - `Terminating`
+    - `Terminated`
+- Error States
+    - `Pending`
+    - `ContainerCreating`
+    - `ImagePullBackOff`
+    - `CrashLoopBackOff`
+    - `Init:0/1`
+
 ### Pipelines 
 #### What is a pipeline?
 A pipeline is generally a series of components that do different tasks but are related in some way. There are many applications of a pipeline and many tools to create them. In Iguazio, we use [KubeFlow Pipelines](#https://www.kubeflow.org/docs/pipelines/).
