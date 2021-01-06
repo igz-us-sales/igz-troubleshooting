@@ -7,6 +7,7 @@
     - [Pipelines](#Pipelines)
 - [General Steps](#General-Steps)
     - [MLRun UI](#MLRun-UI)
+    - [Nuclio UI](#Nuclio-UI)
     - [Grafana Dashboard](#Grafana-Dashboard)
     - [Jupyter Terminal](#Jupyter-Terminal)
 - [Runtime Specific Steps](#Runtime-Specific-Steps)
@@ -91,13 +92,16 @@ Examples can be found in the [examples](examples) directory.
 
 ## General Steps
 ### MLRun UI
-Adi guide
+View MLRun function code, artifacts, inputs, parameters, and more all per specific run. Organized by project.
+
+### Nuclio UI
+View Nuclio function configuration and logs in UI. Organized by project.
 
 ### KubeFlow Pipeline UI
-Monitor pipeline execution and view pod logs
+Monitor pipeline execution and view pod logs.
 
 ### Grafana Dashboard
-Check CPU/Mem/GPU utilization
+Monitor CPU/Mem/GPU utilization with pre-built or custom dashboards. Set up alerts in Slack or email when a particular value exceeds a specified limit.
 
 ### Jupyter Terminal
 #### Kubectl
@@ -141,6 +145,7 @@ kubectl get pods -l mlrun/project=sk-project
 kubectl get pods -l nuclio.io/project-name=getting-started-iris-marcelo
 kubectl get pods -l nuclio.io/function-name=getting-started-iris-marcelo-model-server
 kubectl get pods -l nuclio.io/class=function
+kubectl get pods -l nuclio.io/function-version=latest
 
 # MPIJob (Horovod)
 kubectl get pod -l mpi-job-role=launcher
@@ -253,10 +258,69 @@ kubectl get mpijob train-e4fc59c5 -o yaml | grep -i gpu
 ```
 
 ### Nuclio
+#### List Nuclio serverless functions
+View functions within project in Nuclio UI or:
+```
 kubectl get pod -l nuclio.io/class=function
+NAME                                                              READY   STATUS    RESTARTS   AGE
+nuclio-default-recognize-faces-6747c89c8d-jj4ml                   1/1     Running   0          35d
+nuclio-dogs-vs-cats-demo-deploy-model-5f8556cf7b-zxvt5            1/1     Running   0          21d
+```
+
+#### Describe Nuclio function in detail
+View function in Nuclio UI or:
+```
+kubectl describe pod nuclio-default-recognize-faces-6747c89c8d-jj4ml
+```
+
+#### Get the logs or monitor execution
+View logs in Nuclio UI or:
+```
+kubectl logs nuclio-default-recognize-faces-6747c89c8d-jj4ml
+```
+
+#### Follow logs in real-time
+View logs in Nuclio UI or:
+```
+kubectl logs nuclio-default-recognize-faces-6747c89c8d-jj4ml -f
+```
+
+#### Stop the Nuclio function
+Delete function in Nuclio UI or:
+```
+kubectl delete pod nuclio-default-recognize-faces-6747c89c8d-jj4ml
+```
 
 ## FAQ
 - What if I forget what the name of my pod is?
+    - If executed via MLRun
+        - Check MLRun UI or
+        - `kubectl get pods -l mlrun/owner=<MY-NAME>`
+    - If executed via Kubeflow Pipelines
+        - Check KF Pipelines UI component log or 
+        - `kubectl get pods -l mlrun/owner=<MY-NAME>`
+    - If Nuclio serverless function
+        - Check Nuclio UI or
+        - `kubectl get pods -l nuclio.io/project-name=<MY-PROJECT>`
+        - `kubectl get pods -l nuclio.io/function-name=<MY-FUNCTION>`
 - How do I find if a job is still running?
+    - `kubectl get pod <POD-NAME>` should give a status. If that status is not `Running`, the job is not running.
+    - Check logs in UI or via `kubectl logs <POD-NAME>`. See above for specific runtime example.
 - My job failed. Why?
+    - Run `kubectl describe pod <POD-NAME>` on failure. For example `kubectl describe pod training-demo-c2z6f | grep -i state -C 5`. This will show the state and a brief description in case of failure.
+    - For more inforamtion, check logs in UI or via `kubectl logs <POD-NAME>`. See above for specific runtime example.
 - How can I find who launched a specfic MLRun pod?
+    - Get the pod name
+    ```
+    kubectl get pods -l mlrun/class=job
+    NAME                  READY   STATUS      RESTARTS   AGE
+    download-wqq5v        0/1     Completed   0          53m
+    label-wtxzs           0/1     Completed   0          52m
+    training-demo-8qlcm   0/1     Completed   0          19m
+    training-demo-c2z6f   0/1     Completed   0          40m
+    ```
+    - Describe pod and `grep` by `mlrun/owner`
+    ```
+    kubectl describe pod training-demo-c2z6f | grep mlrun/owner
+    mlrun/owner=nick
+    ```
