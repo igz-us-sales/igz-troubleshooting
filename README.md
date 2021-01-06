@@ -100,14 +100,107 @@ Monitor pipeline execution and view pod logs
 Check CPU/Mem/GPU utilization
 
 ### Jupyter Terminal
-kubectl get/describe pod/mpijob
-Label selection
+#### Kubectl
+The main tool in the Jupyter Terminal is the `kubectl` command. We can use this to create, view, modify, and delete Kubernetes resources. It is an incredibly deep tool, but we only need a subset of the functionality.
+
+The main pattern we will follow is:
+```
+kubectl <ACTION> <RESOURCE-TYPE> <POD-NAME>
+or 
+kubectl <ACTION> <RESOURCE-TYPE>
+```
+
+Examples include:
+```
+kubectl get pods
+kubectl describe pod training-demo-c2z6f
+kubectl delete pod training-demo-c2z6f
+kubectl logs training-demo-c2z6f
+```
+
+We can combine `kubectl` with other command line tools such as `grep` or `awk` to filter results and find what we need.
+
+#### Label Selection
+Another useful way to use `kubectl` is called "label selection". Some pods will have values called `labels` that we can use to filter our results. It is essentially a KV filter for pods.
+
+The main pattern we will follow is:
+```
+kubectl <ACTION> <RESOURCE-TYPE> -l <KEY>=<VALUE>
+```
+
+Examples include:
+```
+# MLRun
+kubectl get pods -l mlrun/class=job
+kubectl get pods -l mlrun/function=train-model
+kubectl get pods -l mlrun/name=training-demo
+kubectl get pods -l mlrun/owner=nick
+kubectl get pods -l mlrun/project=sk-project
+
+# Nuclio
+kubectl get pods -l nuclio.io/project-name=getting-started-iris-marcelo
+kubectl get pods -l nuclio.io/function-name=getting-started-iris-marcelo-model-server
+kubectl get pods -l nuclio.io/class=function
+
+# MPIJob (Horovod)
+kubectl get pod -l mpi-job-role=launcher
+kubectl get pod -l mpi-job-role=worker
+
+# App Services
+kubectl get pods -l app=spark
+kubectl get pods -l app=presto
+kubectl get pods -l app=grafana
+```
+
+These label selectors can be found by running `kubectl describe pod <POD-NAME>` on any pod:
+```
+kubectl describe pod training-demo-c2z6f
+...
+Labels:             mlrun/class=job
+                    mlrun/function=train-model
+                    mlrun/name=training-demo
+                    mlrun/owner=nick
+                    mlrun/project=sk-project
+                    mlrun/scrape-metrics=False
+                    mlrun/tag=latest
+                    mlrun/uid=39156d7275dc481a9b82b7fa9544e9ef
+...
+```
+
+We will use a combination of `grep` and label selectors to find and filter pods when debugging.
 
 ## Runtime Specific Steps
 To troubleshoot specific runtime jobs, you will need to use a combination of the MLRun UI, Grafana Dashboard, and `kubectl` commands via the Jupyter Terminal.
 
 ### KubeJob (Job)
-kubectl get pod
+#### List Jobs
+```
+kubectl get pods -l mlrun/class=job
+NAME                  READY   STATUS      RESTARTS   AGE
+download-wqq5v        0/1     Completed   0          13m
+label-wtxzs           0/1     Completed   0          12m
+training-demo-c2z6f   1/1     Running     0          43s
+```
+
+#### Describe Job in detail
+```
+kubectl describe pod training-demo-c2z6f
+```
+
+#### Get the logs or monitor job execution (to get execution details)
+```
+kubectl logs training-demo-c2z6f
+```
+
+#### Follow logs in real-time
+```
+kubectl logs training-demo-c2z6f -f
+```
+
+#### Stop the job
+```
+kubectl delete pod training-demo-c2z6f
+```
 
 ### MPIJob (Horovod)
 `MPIJobs` will have two types of pods: launchers and workers.
@@ -122,18 +215,32 @@ train-75c6bb4a   2d12h
 train-e4fc59c5   2d12h
 ```
 
+#### Describe MPIJob in detail
+```
+kubectl describe mpijob train-75c6bb4a
+```
+
 #### Get the launcher pod for each job
 ```
 kubectl get pods | grep train | grep launch
+or
+kubectl get pod -l mpi-job-role=launcher
+
 train-75c6bb4a-launcher                                  1/1     Running            0          2d12h
 train-e4fc59c5-launcher                                  1/1     Running            0          2d12h
 ```
+The first method is simpler, but requires your `MPIJob` to be named "train". The second uses a label selector to filter the pods and is universal regardless of naming.
 
 #### Get the logs or monitor job execution (to get execution details)
 ```
 kubectl log train-75c6bb4a-launcher
 ```
 You can see any logs from your job, such as the Epoch the job is at.
+
+#### Follow logs in real-time
+```
+kubectl log train-75c6bb4a-launcher -f
+```
 
 #### Stop the MPIJob
 ```
