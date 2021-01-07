@@ -320,6 +320,7 @@ kubectl delete pod nuclio-default-recognize-faces-6747c89c8d-jj4ml
 ### How do I find if a job is still running?
 - `kubectl get pod <POD-NAME>` should give a status. If that status is not `Running`, the job is not running.
 - Check logs in UI or via `kubectl logs <POD-NAME>`. See above for specific runtime example.
+- If your pod does not come up with `kubectl get pods`, it may have already completed and deleted by the MLRun garbage collection. By default, MLRun will delete any completed/terminated pods every 4 hours.
 
 ### My job failed. Why?
 - Run `kubectl describe pod <POD-NAME>` on failure. For example `kubectl describe pod training-demo-c2z6f | grep -i state -C 5`. This will show the state and a brief description in case of failure.
@@ -342,4 +343,4 @@ mlrun/owner=nick
 ```
 
 ### My pod is in X state. How should I continue?
-- See `Job Lifecycle` for more information on specific statuses and how to troubleshoot them.
+- See [Job Lifecycle](https://igz-us-sales.github.io/igz-troubleshooting/#job-lifecycle) for more information on specific statuses and how to troubleshoot them.
